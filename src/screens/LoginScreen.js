@@ -7,9 +7,14 @@ import {
   KeyboardAvoidingView,
   View,
   TextInput,
+  Alert,
 } from 'react-native';
 import Button from '../components/Button';
 import c_styles from '../theme/CommonStyles';
+import Auth0 from 'react-native-auth0';
+
+var credentials = require('../../auth0-configuration');
+const auth0 = new Auth0(credentials);
 
 const deviceWidth = Dimensions.get('window').width;
 const LoginScreen = props => {
@@ -18,8 +23,34 @@ const LoginScreen = props => {
   const [userPassword, setUserPassword] = useState('');
   const passRef = useRef();
 
+  const validateEmail = () => {
+    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    if (reg.test(userEmail) !== true) {
+      Alert.alert('Email should be valid');
+      return false;
+    } else if (userEmail.toLowerCase() !== props.user?.email.toLowerCase()) {
+      Alert.alert('User is not registered');
+      return false;
+    } else {
+      return true;
+    }
+  };
+  const callWebAuth = () => {
+    auth0.webAuth
+      .authorize({
+        scope: 'openid profile email',
+      })
+      .then(credentials => {
+        Alert.alert('AccessToken: ' + credentials.accessToken);
+        setAccessToken(credentials.accessToken);
+      })
+      .catch(error => console.log('erroe login', error));
+  };
   const validateLogin = () => {
-    props.navigation.navigate('Home');
+ 
+    // userEmail && userEmail !== '' && validateEmail() && 
+    callWebAuth();
+       props.navigation.navigate('Home');
   };
 
   return (
