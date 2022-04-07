@@ -8,3 +8,9 @@ export const getMovies = () => {
   });
 };
 
+export const getCharacters = () => {
+    return axios({
+      method: 'GET',
+      url: `${baseUrl}/people`,
+    });
+  };

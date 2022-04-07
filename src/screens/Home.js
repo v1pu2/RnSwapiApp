@@ -1,20 +1,18 @@
 import React, {useState, useEffect} from 'react';
 
-import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {StyleSheet, Text, FlatList, View} from 'react-native';
+import ItemCard from '../components/ItemCard';
 import {getMovies} from '../services/ApiService';
 
 const Home = props => {
   const [allMovies, setAllMovies] = useState([]);
-  // const [resData, setResData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const callApi = async () => {
     try {
       const response = await getMovies();
-      console.log('response--', JSON.stringify(response));
       if (response?.status === 200 && response?.data) {
         setIsLoading(false);
-        // setResData(response?.data);
         setAllMovies(response?.data?.results);
       }
     } catch (error) {
@@ -24,13 +22,25 @@ const Home = props => {
   useEffect(() => {
     callApi();
   }, []);
+  const onCardClick = item => {
+    props.navigation.navigate('Detail', {item});
+  };
+
+  const renderEventItem = item => {
+    return (
+      <ItemCard item={item?.item} onPress={() => onCardClick(item?.item)} isCharacter={false}/>
+    );
+  };
   return (
     <View style={styles.root}>
-      <Text
-        style={{color: 'black'}}
-        onPress={() => props.navigation.navigate('Detail')}>
-        This is home
-      </Text>
+      <FlatList
+        pagingEnabled={true}
+        legacyImplementation={false}
+        showsVerticalScrollIndicator={false}
+        data={allMovies}
+        renderItem={item => renderEventItem(item)}
+        keyExtractor={item => item?.item?.episode_id}
+      />
     </View>
   );
 };

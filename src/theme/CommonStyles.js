@@ -60,5 +60,23 @@ const c_styles = StyleSheet.create({
     alignSelf: 'center',
     textTransform: 'uppercase',
   },
+  rootCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: Colors.color2,
+    borderRadius: 5,
+    margin: 10,
+    padding: 10,
+  },
+  txtCardTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: Colors.color0,
+    marginBottom: 10,
+  },
+  txtCardInfo: {
+    fontSize: 16,
+    color: Colors.color0,
+  },
 });
 export default c_styles;

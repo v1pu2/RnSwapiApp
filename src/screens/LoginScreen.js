@@ -19,7 +19,6 @@ const LoginScreen = props => {
   const passRef = useRef();
 
   const validateLogin = () => {
-    console.log('login ');
     props.navigation.navigate('Home');
   };
 
