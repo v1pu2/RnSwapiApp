@@ -1,6 +1,7 @@
 import React from 'react';
 
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
+import Navigators from './src/containers/Navigators';
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -10,9 +11,7 @@ const App = () => {
   };
 
   return (
-    <View style={styles.root}>
-      <Text>This is app</Text>
-    </View>
+   <Navigators/>
   );
 };
 

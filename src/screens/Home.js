@@ -2,7 +2,7 @@ import React from 'react';
 
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 
-const Home = () => {
+const Home = (props) => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
@@ -10,8 +10,12 @@ const Home = () => {
   };
 
   return (
-    <View style={styles.root}>
-      <Text>This is app</Text>
+    <View style={[styles.root, backgroundStyle]}>
+      <Text
+        style={{color: isDarkMode ? 'white' : 'black'}}
+        onPress={() => props.navigation.navigate('Detail')}>
+        This is home
+      </Text>
     </View>
   );
 };
