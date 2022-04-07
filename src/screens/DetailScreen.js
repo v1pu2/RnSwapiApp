@@ -23,6 +23,9 @@ const DetailScreen = props => {
   };
   useEffect(() => {
     callApi();
+    return () => {
+      setAllCharacters([]);
+    };
   }, []);
   useEffect(() => {
     const filteredResult = allCharacters.filter(item => {

@@ -21,6 +21,10 @@ const Home = props => {
   };
   useEffect(() => {
     callApi();
+    return () => {
+      setAllMovies([]);
+    };
+
   }, []);
   const onCardClick = item => {
     props.navigation.navigate('Detail', {item});
