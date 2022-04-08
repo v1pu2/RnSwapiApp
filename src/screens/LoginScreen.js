@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 
 import {StyleSheet, Dimensions, Text, View, Alert} from 'react-native';
 import Button from '../components/Button';
@@ -13,7 +13,7 @@ const deviceWidth = Dimensions.get('window').width;
 const LoginScreen = props => {
   const [accessToken, setAccessToken] = useState(null);
 
- 
+  
   const callWebAuth = () => {
     auth0.webAuth
       .authorize({
@@ -22,6 +22,7 @@ const LoginScreen = props => {
       .then(credentials => {
         Alert.alert('AccessToken: ' + credentials.accessToken);
         setAccessToken(credentials.accessToken);
+        props.navigation.navigate('Home');
       })
       .catch(error => console.log('erroe login', error));
   };
@@ -40,10 +41,6 @@ const LoginScreen = props => {
     callWebAuth();
   };
 
-  useEffect(() => {
-    props.navigation.navigate('Home');
-  }, [accessToken]);
-  
   let loggedIn = accessToken !== null;
   return (
     <View style={c_styles.container}>
