@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 import {StyleSheet, FlatList, View} from 'react-native';
 import ItemCard from '../components/ItemCard';
+import LoaderView from '../components/LoaderView';
 import {getCharacters} from '../services/ApiService';
 
 const DetailScreen = props => {
@@ -14,8 +15,8 @@ const DetailScreen = props => {
     try {
       const response = await getCharacters();
       if (response?.status === 200 && response?.data) {
-        setIsLoading(false);
         setAllCharacters(response?.data?.results);
+        setIsLoading(false);
       }
     } catch (error) {
       Alert.alert('No API Response');
@@ -34,12 +35,11 @@ const DetailScreen = props => {
     setFilteredCharacters(filteredResult);
   }, [allCharacters]);
   const renderEventItem = item => {
-    return (
-      <ItemCard item={item?.item} isCharacter={true}/>
-    );
+    return <ItemCard item={item?.item} isCharacter={true} />;
   };
   return (
     <View style={styles.root}>
+      {isLoading && <LoaderView />}
       <FlatList
         pagingEnabled={true}
         legacyImplementation={false}
