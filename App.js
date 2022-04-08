@@ -3,6 +3,7 @@ import React from 'react';
 import {StyleSheet, Text, useColorScheme, View} from 'react-native';
 import Navigators from './src/containers/Navigators';
 
+console.disableYellowBox = true;
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
