@@ -1,4 +1,4 @@
 module.exports = {
-    clientId: "9hJ8AYzXDQrI6L9RXPkzHWYwDPzz5HAP",
-    domain: "preprod-dsinstruments.eu.auth0.com"
+    clientId: "4Fvo78uqRIk9D58PX7KWORDkCeoaJrye",
+    domain: "vipu.us.auth0.com"
   };

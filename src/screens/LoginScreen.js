@@ -1,17 +1,10 @@
-import React, {useState, useRef} from 'react';
+import React, {useState} from 'react';
 
-import {
-  StyleSheet,
-  Dimensions,
-  Text,
-  KeyboardAvoidingView,
-  View,
-  TextInput,
-  Alert,
-} from 'react-native';
+import {StyleSheet, Dimensions, Text, View, Alert} from 'react-native';
 import Button from '../components/Button';
 import c_styles from '../theme/CommonStyles';
 import Auth0 from 'react-native-auth0';
+import Colors from '../theme/Colors';
 
 var credentials = require('../../auth0-configuration');
 const auth0 = new Auth0(credentials);
@@ -19,22 +12,8 @@ const auth0 = new Auth0(credentials);
 const deviceWidth = Dimensions.get('window').width;
 const LoginScreen = props => {
   const [accessToken, setAccessToken] = useState(null);
-  const [userEmail, setUserEmail] = useState('');
-  const [userPassword, setUserPassword] = useState('');
-  const passRef = useRef();
 
-  const validateEmail = () => {
-    const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if (reg.test(userEmail) !== true) {
-      Alert.alert('Email should be valid');
-      return false;
-    } else if (userEmail.toLowerCase() !== props.user?.email.toLowerCase()) {
-      Alert.alert('User is not registered');
-      return false;
-    } else {
-      return true;
-    }
-  };
+  
   const callWebAuth = () => {
     auth0.webAuth
       .authorize({
@@ -43,50 +22,42 @@ const LoginScreen = props => {
       .then(credentials => {
         Alert.alert('AccessToken: ' + credentials.accessToken);
         setAccessToken(credentials.accessToken);
+        props.navigation.navigate('Home');
       })
       .catch(error => console.log('erroe login', error));
   };
+  const onLogout = () => {
+    auth0.webAuth
+      .clearSession({})
+      .then(success => {
+        Alert.alert('Logged out!');
+        setAccessToken(null);
+      })
+      .catch(error => {
+        console.log('Log out cancelled');
+      });
+  };
   const validateLogin = () => {
- 
-    // userEmail && userEmail !== '' && validateEmail() && 
     callWebAuth();
-       props.navigation.navigate('Home');
   };
 
+  let loggedIn = accessToken !== null;
   return (
-    <KeyboardAvoidingView style={c_styles.container}>
+    <View style={c_styles.container}>
       <View style={styles.topView}>
         <Text style={styles.txtTitle}>Welcome</Text>
-        <Text style={c_styles.txtSubTitle}>Sub-title text goes here</Text>
+        <Text style={c_styles.txtSubTitle}>SSO Login with Auth0</Text>
+        <Text style={styles.txtLoginStatus}>
+          You are{loggedIn ? ' ' : ' not '}logged in.{' '}
+        </Text>
       </View>
       <View style={styles.SectionStyle}>
-        <TextInput
-          style={c_styles.inputStyle}
-          value={userEmail}
-          placeholder="Email Address *"
-          keyboardType="email-address"
-          returnKeyType="next"
-          onSubmitEditing={() => {
-            passRef.current.focus();
-          }}
-          onChangeText={item => setUserEmail(item)}
-          placeholderTextColor="#8b9cb5"
-          underlineColorAndroid="#f000"
+        <Button
+          text={loggedIn ? 'Log Out' : 'Log In'}
+          onPress={loggedIn ? onLogout : validateLogin}
         />
-
-        <TextInput
-          ref={passRef}
-          style={c_styles.inputStyle}
-          value={userPassword}
-          onChangeText={item => setUserPassword(item)}
-          placeholder="Password *"
-          placeholderTextColor="#8b9cb5"
-          secureTextEntry={true}
-        />
-
-        <Button text="Login" onPress={validateLogin} />
       </View>
-    </KeyboardAvoidingView>
+    </View>
   );
 };
 
@@ -105,7 +76,7 @@ const styles = StyleSheet.create({
   topView: {width: deviceWidth, alignItems: 'center'},
   txtTitle: {
     fontWeight: 'bold',
-    fontSize: 32,
+    fontSize: 36,
     color: '#041115',
   },
   SectionStyle: {
@@ -115,6 +86,11 @@ const styles = StyleSheet.create({
     marginLeft: 35,
     marginRight: 35,
     margin: 10,
+  },
+  txtLoginStatus: {
+    fontSize: 16,
+    color: Colors.color0,
+    lineHeight: 20,
   },
 });
 

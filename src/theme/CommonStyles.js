@@ -12,9 +12,10 @@ const c_styles = StyleSheet.create({
 
   txtSubTitle: {
     fontWeight: '600',
-    fontSize: 12,
+    fontSize: 14,
     lineHeight: 20,
     color: '#8a979b',
+    marginVertical:20
   },
   containerStyle: {
     borderBottomColor: '#efefef',

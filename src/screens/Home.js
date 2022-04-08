@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 
 import {StyleSheet, Text, FlatList, View} from 'react-native';
 import ItemCard from '../components/ItemCard';
+import LoaderView from '../components/LoaderView';
 import {getMovies} from '../services/ApiService';
 
 const Home = props => {
@@ -24,7 +25,6 @@ const Home = props => {
     return () => {
       setAllMovies([]);
     };
-
   }, []);
   const onCardClick = item => {
     props.navigation.navigate('Detail', {item});
@@ -32,11 +32,16 @@ const Home = props => {
 
   const renderEventItem = item => {
     return (
-      <ItemCard item={item?.item} onPress={() => onCardClick(item?.item)} isCharacter={false}/>
+      <ItemCard
+        item={item?.item}
+        onPress={() => onCardClick(item?.item)}
+        isCharacter={false}
+      />
     );
   };
   return (
     <View style={styles.root}>
+      {isLoading && <LoaderView />}
       <FlatList
         pagingEnabled={true}
         legacyImplementation={false}
